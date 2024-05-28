@@ -1,9 +1,10 @@
-const { selectTopics } = require("../models/treasures.models")
+const { selectTopics } = require("../models/topics.models")
+
 
 
 exports.getTopics = (req, res, next) => {
-
     return selectTopics().then((topic) => {
-      res.status(200).send(topic.rows)
+      res.status(200).send({topic})
     })
 }
+
