@@ -8,7 +8,6 @@ exports.findArticle = (article_id) => {
     queryString += ` WHERE article_id = $1`;
     queries.push(article_id);
   }
-  console.log(queryString, queries);
   return db.query(queryString, queries).then((query) => {
     if (query.rows.length === 0) {
       return Promise.reject({
