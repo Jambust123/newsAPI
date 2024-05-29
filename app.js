@@ -2,19 +2,22 @@ const express = require("express");
 const app = express();
 const { getTopics } = require("./controllers/topics.controllers");
 const { getEndpoints } = require("./controllers/api.controllers");
-const { getArticles } = require("./controllers/articles.controllers");
+const { getAllArticles } = require("./controllers/articles.controllers");
+const { getArticlesById } = require("./controllers/articlesById.controllers");
 
 app.get("/api/topics", getTopics);
 
 app.get("/api", getEndpoints);
 
-app.get("/api/articles/:articles_id", getArticles);
+app.get("/api/articles/:articles_id", getArticlesById);
+
+app.get("/api/articles", getAllArticles)
 
 app.use((err, req, res, next) => {
   if (err.code) {
     res
       .status(400)
-      .send({ msg: `ERROR: bad request. use "/api" for acceptable endpoints` });
+      .send({ msg: `ERROR: bad request. ensure you use a valid article ID number` });
   }
   next(err);
 });

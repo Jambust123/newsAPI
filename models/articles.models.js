@@ -1,23 +1,25 @@
 const db = require("../db/connection");
 
-exports.findArticle = (article_id) => {
-  let queryString = ` SELECT articles.* FROM articles 
-    JOIN topics ON topics.slug = articles.topic
-    JOIN users ON users.username = articles.author `;
-  const queries = [];
-
-  if (article_id) {
-    queryString += `WHERE article_id = $1`;
-    queries.push(article_id);
-  }
-  return db.query(queryString, queries).then((query) => {
-    if (query.rows.length === 0) {
-      return Promise.reject({
-        status: 404,
-        msg: `ERROR: no article with that id found`,
-      });
-    } else {
-      return query.rows;
-    }
-  });
+exports.findAllArticles = () => {
+  return db.query(
+    `SELECT 
+    articles.author,
+    articles.title,
+    articles.topic,
+    articles.article_id,
+    articles.created_at,
+    articles.votes,
+    articles.article_img_url, 
+    COUNT(comments.comment_id) AS comment_count
+    FROM articles
+    LEFT JOIN comments ON articles.article_id = comments.article_id
+    GROUP BY articles.article_id
+    ORDER BY articles.created_at DESC`
+  )
+  .then((result) => {
+    return result.rows
+  })
+  .catch((err) => {
+    console.log(err);
+  })
 };

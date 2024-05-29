@@ -1,11 +1,11 @@
-const { findArticle } = require("../models/articles.models")
+const { findAllArticles } = require("../models/articles.models")
 
 
-exports.getArticles = (req, res, next) => {
-    const{articles_id} = req.params
-    return findArticle(articles_id)
-    .then((article) => {
-        res.status(200).send(article)
+
+exports.getAllArticles = (req, res, next) => {
+    return findAllArticles()
+    .then((allArticles) => {
+      res.status(200).send(allArticles)
     })
     .catch((err) => {
       next(err)
