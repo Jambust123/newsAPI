@@ -19,7 +19,4 @@ exports.findAllArticles = () => {
   .then((result) => {
     return result.rows
   })
-  .catch((err) => {
-    console.log(err);
-  })
 };
