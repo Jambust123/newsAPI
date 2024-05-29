@@ -3,6 +3,7 @@ const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data/index");
 const app = require("../app");
+const endpoint = require("../endpoints.json")
 
 beforeEach(() => {
   return seed(testData);
@@ -17,7 +18,7 @@ describe("getTopics", () => {
       .get("/api/topics")
       .expect(200)
       .then(({ body }) => {
-        expect(body).toEqual({"topic": [{"description": "The man, the Mitch, the legend", "slug": "mitch"}, {"description": "Not dogs", "slug": "cats"}, {"description": "what books are made of", "slug": "paper"}]});
+        expect(body).toEqual([{"description": "The man, the Mitch, the legend", "slug": "mitch"}, {"description": "Not dogs", "slug": "cats"}, {"description": "what books are made of", "slug": "paper"}]);
       });
   });
 
@@ -28,37 +29,45 @@ describe("getTopics", () => {
         .get("/api")
         .expect(200)
         .then(({ body }) => {
-          expect(body).toEqual({
-            "GET /api": {
-              description:
-                "serves up a json representation of all the available endpoints of the api",
-            },
-            "GET /api/topics": {
-              description: "serves an array of all topics",
-              queries: [],
-              exampleResponse: {
-                topics: [{ slug: "football", description: "Footie!" }],
-              },
-            },
-            "GET /api/articles": {
-              description: "serves an array of all articles",
-              queries: ["author", "topic", "sort_by", "order"],
-              exampleResponse: {
-                articles: [
-                  {
-                    title: "Seafood substitutions are increasing",
-                    topic: "cooking",
-                    author: "weegembump",
-                    body: "Text from the article..",
-                    created_at: "2018-05-30T15:59:13.341Z",
-                    votes: 0,
-                    comment_count: 6,
-                  },
-                ],
-              },
-            },
-          });
+          expect(body).toEqual(endpoint);
         });
     });
   });
+});
+
+describe('getArticles', () => {
+    test('200: /api/articles/:article_id', () => {
+        return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        body.forEach((column) => {
+          expect(column).toMatchObject({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+          })
+        })
+      });
+    });
+    test('400: should return bad request ', () => {
+        return request(app)
+        .get("/api/articles/NaN")
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.msg).toBe(`ERROR: bad request. use "/api" for acceptable endpoints`)
+        });
+    });
+    test('404 should return not ', () => {
+        return request(app)
+        .get("/api/articles/99")
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.msg).toBe(`ERROR: no article with that id found`)
+        });
+    });
 });
