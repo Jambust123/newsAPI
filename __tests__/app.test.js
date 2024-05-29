@@ -121,4 +121,12 @@ describe("getArticles", () => {
         expect(body.msg).toBe(`ERROR: no article with that id found`)
       })
   });
+  test('200: should be ordered by time created', () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => { 
+        expect(body.comments).toBeSortedBy(`created_at`, {descending: true})
+      })
+  });
 });

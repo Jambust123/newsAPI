@@ -6,7 +6,7 @@ exports.findArticleComments = (article_id) => {
   const queries = [];
 
   if (article_id) {
-    queryString += ` WHERE article_id = $1 `;
+    queryString += ` WHERE article_id = $1 ORDER BY comments.created_at DESC`;
     queries.push(article_id);
   }
 return db.query(queryString, queries).then((query) => {
