@@ -28,7 +28,7 @@
   },
   "GET /api/articles/:article_id": {
     "description": "serves an array of an article based on its id",
-    "queries": ["author_id"],
+    "queries": [],
     "exampleResponse": {
       "articles": [
         {

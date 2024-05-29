@@ -4,6 +4,7 @@ const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data/index");
 const app = require("../app");
 const endpoint = require("../endpoints.json");
+const jestsorted = require("jest-sorted");
 const { string } = require("pg-format");
 
 beforeEach(() => {
@@ -81,8 +82,8 @@ describe("getArticles", () => {
       .get("/api/articles")
       .expect(200)
       .then(({ body }) => {
-        body.forEach((column) => {
-          expect(column).toMatchObject({
+        body.allArticles.forEach((article) => {
+          expect(article).toMatchObject({
             author: expect.any(String),
             title: expect.any(String),
             topic: expect.any(String),
@@ -94,5 +95,30 @@ describe("getArticles", () => {
           });
         });
       });
+  });
+  test("200: should return the comment information when given an article id", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        body.comments.forEach((comment) => {
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            article_id: 1,
+          });
+        });
+      });
+  });
+  test('404: should return not found', () => {
+    return request(app)
+      .get("/api/articles/99/comments")
+      .expect(404)
+      .then(({ body }) => { 
+        expect(body.msg).toBe(`ERROR: no article with that id found`)
+      })
   });
 });
