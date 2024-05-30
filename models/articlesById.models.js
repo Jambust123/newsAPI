@@ -22,7 +22,6 @@ exports.findArticle = (article_id) => {
 
 exports.createArticleComments = (article_id, body) => {
   commentBody = [article_id, body.author, body.body];
-
   return db
     .query(
       `INSERT INTO comments 

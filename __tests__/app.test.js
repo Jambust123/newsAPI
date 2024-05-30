@@ -131,7 +131,7 @@ describe("getArticles", () => {
   });
 });
 
-describe.only("post article comments", () => {
+describe("post article comments", () => {
   test("201: should post a comment to the relecent article", () => {
     const input = {
       author: "icellusedkars",
@@ -153,5 +153,18 @@ describe.only("post article comments", () => {
           });
         });
       });
-  });
+  });   
+  test("400: should return bad request", () => {
+    const input = {
+      author: "icellusedkars",
+      body: "lol",
+    };
+    return request(app)
+      .post("/api/articles/banana/comments")
+      .send(input)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe(`ERROR: bad request. ensure you use a valid article ID number`);
+      });
+  });  
 });
