@@ -206,3 +206,30 @@ describe("patch article votes", () => {
         });
     });
 })
+
+describe("delete article comments", () => {
+    test("204: should delete a comment", () => {
+        return request(app)
+       .delete("/api/comments/1")
+       .expect(204)
+       .then(({ body }) => {
+            expect(body).toEqual({});
+        })
+    })
+    test("404: should return not found", () => {
+        return request(app)
+       .delete("/api/comments/999")
+       .expect(404)
+       .then(({ body }) => {
+            expect(body.msg).toBe(`ERROR: no article with that id found`);
+        })
+    })
+    test("400: should return bad request", () => {
+        return request(app)
+       .delete("/api/comments/banana")
+       .expect(400)
+       .then(({ body }) => {
+            expect(body.msg).toBe(`ERROR: bad request. ensure you use a valid article ID number`);
+        })
+    })
+})

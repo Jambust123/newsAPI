@@ -1,4 +1,4 @@
-const { findArticleComments } = require("../models/articleComments.models");
+const { findArticleComments, removesComment } = require("../models/articleComments.models");
 const { createArticleComments } = require("../models/articlesById.models");
 
 exports.getArticleComments = (req, res, next) => {
@@ -23,3 +23,14 @@ exports.postArticleComment = (req, res, next) => {
       next(err);
     });
 };
+
+exports.deleteArticleComment = (req, res, next) => {
+    const { comment_id } = req.params;
+    return removesComment(comment_id)
+   .then((deletedComment) => {
+     res.status(204).send("comment has been deleted")
+   })
+   .catch((err) => {
+     next(err)
+   })
+}
