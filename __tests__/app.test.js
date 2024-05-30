@@ -207,7 +207,7 @@ describe("patch article votes", () => {
     });
 })
 
-describe.only("delete article comments", () => {
+describe("delete article comments", () => {
     test("204: should delete a comment", () => {
         return request(app)
        .delete("/api/comments/1")
