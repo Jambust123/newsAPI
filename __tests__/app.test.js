@@ -156,23 +156,23 @@ describe("post article comments", () => {
   });
   test("400: should return bad request", () => {
     return request(app)
-     .post("/api/articles/banana/comments")
-     .expect(400)
-     .then(({ body }) => {
+      .post("/api/articles/banana/comments")
+      .expect(400)
+      .then(({ body }) => {
         expect(body.msg).toBe(
           `ERROR: bad request. ensure you use a valid article ID number`
         );
       });
-  })
+  });
 });
 
 describe("patch article votes", () => {
-    test("200: should return the updated article", () => {
-      return request(app)
-       .patch("/api/articles/1")
-       .send({ inc_votes: 1 })
-       .expect(200)
-       .then(({ body }) => {
+  test("200: should return the updated article", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: 1 })
+      .expect(200)
+      .then(({ body }) => {
         body.article.forEach((article) => {
           expect(article).toMatchObject({
             article_id: 1,
@@ -185,51 +185,73 @@ describe("patch article votes", () => {
             article_img_url: expect.any(String),
           });
         });
-    })
-    });
-    test('404: should return not found', () => {
-        return request(app)
-        .patch("/api/articles/99")
-        .send({ inc_votes: 1 })
-        .expect(404)
-        .then(({ body }) => {
-            expect(body.msg).toBe(`ERROR: no article with that id found`);
-        });
-    });
-    test('400: should return bad reqyest', () => {
-        return request(app)
-        .patch("/api/articles/banana")
-        .send({ inc_votes: 1 })
-        .expect(400)
-        .then(({ body }) => {
-            expect(body.msg).toBe(`ERROR: bad request. ensure you use a valid article ID number`);
-        });
-    });
-})
+      });
+  });
+  test("404: should return not found", () => {
+    return request(app)
+      .patch("/api/articles/99")
+      .send({ inc_votes: 1 })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe(`ERROR: no article with that id found`);
+      });
+  });
+  test("400: should return bad reqyest", () => {
+    return request(app)
+      .patch("/api/articles/banana")
+      .send({ inc_votes: 1 })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe(
+          `ERROR: bad request. ensure you use a valid article ID number`
+        );
+      });
+  });
+});
 
 describe("delete article comments", () => {
-    test("204: should delete a comment", () => {
-        return request(app)
-       .delete("/api/comments/1")
-       .expect(204)
-       .then(({ body }) => {
-            expect(body).toEqual({});
-        })
-    })
-    test("404: should return not found", () => {
-        return request(app)
-       .delete("/api/comments/999")
-       .expect(404)
-       .then(({ body }) => {
-            expect(body.msg).toBe(`ERROR: no article with that id found`);
-        })
-    })
-    test("400: should return bad request", () => {
-        return request(app)
-       .delete("/api/comments/banana")
-       .expect(400)
-       .then(({ body }) => {
-            expect(body.msg).toBe(`ERROR: bad request. ensure you use a valid article ID number`);
-        })
-    })
-})
+  test("204: should delete a comment", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body).toEqual({});
+      });
+  });
+  test("404: should return not found", () => {
+    return request(app)
+      .delete("/api/comments/999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe(`ERROR: no article with that id found`);
+      });
+  });
+  test("400: should return bad request", () => {
+    return request(app)
+      .delete("/api/comments/banana")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe(
+          `ERROR: bad request. ensure you use a valid article ID number`
+        );
+      });
+  });
+});
+
+describe(" get users", () => {
+  test("200: should get all users", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        body.users.forEach((user) => {
+          expect(user).toMatchObject({
+            username: expect.any(String),
+            avatar_url: expect.any(String),
+            name: expect.any(String),
+          });
+        });
+      });
+  });
+});
+
