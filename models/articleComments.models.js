@@ -9,7 +9,8 @@ exports.findArticleComments = (article_id) => {
     queryString += ` WHERE article_id = $1 ORDER BY comments.created_at DESC`;
     queries.push(article_id);
   }
-return db.query(queryString, queries).then((query) => {
+return db.query(queryString, queries)
+.then((query) => {
     if (query.rows.length === 0) {
       return Promise.reject({
         status: 404,
