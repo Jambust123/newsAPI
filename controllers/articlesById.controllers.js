@@ -1,10 +1,10 @@
-const { findArticle } = require("../models/articlesById.models")
+const { findArticle, updateArticle } = require("../models/articlesById.models")
 
 
 
 exports.getArticlesById = (req, res, next) => {
-    const{articles_id} = req.params
-    return findArticle(articles_id)
+    const{article_id} = req.params
+    return findArticle(article_id)
     .then((article) => {
         res.status(200).send(article)
     })
@@ -12,3 +12,16 @@ exports.getArticlesById = (req, res, next) => {
       next(err)
     })
 }
+
+exports.patchArticle = (req, res, next) => {
+    const { article_id } = req.params;
+    const { inc_votes } = req.body;
+    return updateArticle(article_id, inc_votes)
+    .then((article) => {
+      res.status(200).send({ article });
+    })
+    .catch((err) => {
+      next(err);
+    });
+  };
+  

@@ -43,3 +43,21 @@ exports.createArticleComments = (article_id, body) => {
       }
     });
 };
+
+exports.updateArticle = (article_id, inc_votes) => {
+  return db
+    .query(
+      `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *`,
+      [inc_votes, article_id]
+    )
+    .then((query) => {
+      if (query.rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: `ERROR: no article with that id found`,
+        });
+      } else {
+        return query.rows;
+      }
+    });
+};
