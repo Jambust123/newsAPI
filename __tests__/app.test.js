@@ -255,3 +255,32 @@ describe(" get users", () => {
   });
 });
 
+describe("get articles by topic", () => {
+  test("200: should get all articles by topic", () => {
+    return request(app)
+     .get("/api/articles?topic=mitch")
+     .expect(200)
+     .then(({ body }) => {
+        body.allArticles.forEach((article) => {
+          expect(article).toMatchObject({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            topic: "mitch",
+            author: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(String),
+          });
+        });
+      });
+  });
+  test("404: should return not found", () => {
+    return request(app)
+     .get("/api/articles?topic=banana")
+     .expect(404)
+     .then(({ body }) => {
+        expect(body.msg).toBe(`ERROR: topic not yet created`);
+      });
+  })
+})

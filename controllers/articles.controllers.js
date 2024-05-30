@@ -1,7 +1,8 @@
 const { findAllArticles } = require("../models/articles.models");
 
 exports.getAllArticles = (req, res, next) => {
-  return findAllArticles()
+  const { topic } = req.query;
+  return findAllArticles(topic)
     .then((allArticles) => {
       res.status(200).send({ allArticles });
     })
@@ -9,4 +10,3 @@ exports.getAllArticles = (req, res, next) => {
       next(err);
     });
 };
-
