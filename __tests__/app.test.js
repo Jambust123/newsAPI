@@ -113,20 +113,45 @@ describe("getArticles", () => {
         });
       });
   });
-  test('404: should return not found', () => {
+  test("404: should return not found", () => {
     return request(app)
       .get("/api/articles/99/comments")
       .expect(404)
-      .then(({ body }) => { 
-        expect(body.msg).toBe(`ERROR: no article with that id found`)
-      })
+      .then(({ body }) => {
+        expect(body.msg).toBe(`ERROR: no article with that id found`);
+      });
   });
-  test('200: should be ordered by time created', () => {
+  test("200: should be ordered by time created", () => {
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
-      .then(({ body }) => { 
-        expect(body.comments).toBeSortedBy(`created_at`, {descending: true})
-      })
+      .then(({ body }) => {
+        expect(body.comments).toBeSortedBy(`created_at`, { descending: true });
+      });
+  });
+});
+
+describe.only("post article comments", () => {
+  test("201: should post a comment to the relecent article", () => {
+    const input = {
+      author: "icellusedkars",
+      body: "lol",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(input)
+      .expect(201)
+      .then(({ body }) => {
+        body.comment.forEach((comment) => {
+          expect(comment).toMatchObject({
+            article_id: expect.any(Number),
+            author: "icellusedkars",
+            body: "lol",
+            comment_id: expect.any(Number),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+          });
+        });
+      });
   });
 });
