@@ -32,7 +32,7 @@ exports.createArticleComments = (article_id, body) => {
     VALUES 
     ($1, $2, $3) 
     returning *`,
-      commentBody
+    commentBody
     )
     .then((query) => {
       if (query.rowCount === 0) {
@@ -43,8 +43,11 @@ exports.createArticleComments = (article_id, body) => {
       } else {
         return query.rows;
       }
-    });
-};
+    })
+    .catch((err) => {
+      throw err
+    })
+}
 
 exports.removesComment = (comment_id) => {
     return db.query(`DELETE FROM comments 

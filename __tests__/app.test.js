@@ -156,7 +156,7 @@ describe("post article comments", () => {
       .then(({ body }) => {
         body.comment.forEach((comment) => {
           expect(comment).toMatchObject({
-            article_id: expect.any(Number),
+            article_id: 1,
             author: "icellusedkars",
             body: "lol",
             comment_id: expect.any(Number),
@@ -174,6 +174,19 @@ describe("post article comments", () => {
         expect(body.msg).toBe(
           `ERROR: bad request. ensure you use a valid article ID number`
         );
+      });
+  });
+  test('404: should return not found', () => {
+    const input = {
+      author: "icellusedkars",
+      body: "lol",
+    };
+    return request(app)
+    .post("/api/articles/99/comments")
+    .send(input)
+     .expect(404)
+     .then(({ body }) => {
+        expect(body.msg).toBe(`ERROR: no article with that id found`);
       });
   });
 });
