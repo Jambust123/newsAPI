@@ -1,5 +1,4 @@
-const { findArticleComments, removesComment } = require("../models/articleComments.models");
-const { createArticleComments } = require("../models/articlesById.models");
+const { findArticleComments, removesComment, createArticleComments } = require("../models/articleComments.models");
 
 exports.getArticleComments = (req, res, next) => {
   const { article_id } = req.params;

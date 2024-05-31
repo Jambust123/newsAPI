@@ -46,7 +46,7 @@ describe("getArticles", () => {
       .get("/api/articles/1")
       .expect(200)
       .then(({ body }) => {
-        body.forEach((column) => {
+        body.article.forEach((column) => {
           expect(column).toMatchObject({
             article_id: 1,
             title: expect.any(String),
@@ -55,6 +55,8 @@ describe("getArticles", () => {
             body: expect.any(String),
             created_at: expect.any(String),
             votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(String),
           });
         });
       });
@@ -258,9 +260,9 @@ describe(" get users", () => {
 describe("get articles by topic", () => {
   test("200: should get all articles by topic", () => {
     return request(app)
-     .get("/api/articles?topic=mitch")
-     .expect(200)
-     .then(({ body }) => {
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then(({ body }) => {
         body.allArticles.forEach((article) => {
           expect(article).toMatchObject({
             article_id: expect.any(Number),
@@ -277,10 +279,51 @@ describe("get articles by topic", () => {
   });
   test("404: should return not found", () => {
     return request(app)
-     .get("/api/articles?topic=banana")
-     .expect(404)
-     .then(({ body }) => {
+      .get("/api/articles?topic=banana")
+      .expect(404)
+      .then(({ body }) => {
         expect(body.msg).toBe(`ERROR: topic not yet created`);
       });
-  })
-})
+  });
+});
+
+describe("get comment count from article", () => {
+  test("200: should return the comment count", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        body.article.forEach((article) => {
+        expect(article).toMatchObject({
+          author: expect.any(String),
+          title: expect.any(String),
+          article_id: 1,
+          body: expect.any(String),
+          topic: expect.any(String),
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+          article_img_url: expect.any(String),
+          comment_count: expect.any(String),
+        });
+        });
+      });
+  });
+  test("404: should return not found", () => {
+    return request(app)
+      .get("/api/articles/99")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe(`ERROR: no article with that id found`);
+      });
+  });
+  test("400: should return bad request", () => {
+    return request(app)
+      .get("/api/articles/banana")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe(
+          `ERROR: bad request. ensure you use a valid article ID number`
+        );
+      });
+  });
+});
