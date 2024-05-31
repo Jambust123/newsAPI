@@ -131,6 +131,16 @@ describe("getArticles", () => {
         expect(body.comments).toBeSortedBy(`created_at`, { descending: true });
       });
   });
+  test("400: should return bad request", () => {
+    return request(app)
+      .get("/api/articles/banana/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe(
+          `ERROR: bad request. ensure you use a valid article ID number`
+        );
+      });
+  });
 });
 
 describe("post article comments", () => {
@@ -294,17 +304,17 @@ describe("get comment count from article", () => {
       .expect(200)
       .then(({ body }) => {
         body.article.forEach((article) => {
-        expect(article).toMatchObject({
-          author: expect.any(String),
-          title: expect.any(String),
-          article_id: 1,
-          body: expect.any(String),
-          topic: expect.any(String),
-          votes: expect.any(Number),
-          created_at: expect.any(String),
-          article_img_url: expect.any(String),
-          comment_count: expect.any(String),
-        });
+          expect(article).toMatchObject({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: 1,
+            body: expect.any(String),
+            topic: expect.any(String),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(String),
+          });
         });
       });
   });
