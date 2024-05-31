@@ -56,7 +56,7 @@ exports.removesComment = (comment_id) => {
         if (query.rows.length === 0) {
             return Promise.reject({
               status: 404,
-              msg: `ERROR: no article with that id found`,
+              msg: `ERROR: no comment with that id found`,
             });
           }
     })

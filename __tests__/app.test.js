@@ -278,6 +278,15 @@ describe(" get users", () => {
         });
       });
   });
+  test('200: should have users', () => {
+    return request(app)
+     .get("/api/users")
+     .expect(200)
+     .then(({ body }) => {
+        expect(body.users.length).toBe(4);
+      });
+
+  });
 });
 
 describe("get articles by topic", () => {
