@@ -278,14 +278,13 @@ describe(" get users", () => {
         });
       });
   });
-  test('200: should have users', () => {
+  test('200: should have 4 users', () => {
     return request(app)
      .get("/api/users")
      .expect(200)
      .then(({ body }) => {
         expect(body.users.length).toBe(4);
       });
-
   });
 });
 
@@ -308,6 +307,14 @@ describe("get articles by topic", () => {
           });
         });
       });
+  });
+  test('200: should have 12 articles witht the mitch topic', () => {
+    return request(app)
+     .get("/api/articles?topic=mitch")
+     .expect(200)
+     .then(({ body }) => {
+       expect(body.allArticles.length).toBe(12);
+     })
   });
   test("404: should return not found", () => {
     return request(app)
