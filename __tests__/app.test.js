@@ -61,9 +61,9 @@ describe("getArticles", () => {
         });
       });
   });
-  test("400: should return bad request ", () => {
+  test("400: should return bad request when given a string", () => {
     return request(app)
-      .get("/api/articles/NaN")
+      .get("/api/articles/banana")
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe(
@@ -71,7 +71,7 @@ describe("getArticles", () => {
         );
       });
   });
-  test("404 should return not found", () => {
+  test("404 should return not found when passed an article that is invalid", () => {
     return request(app)
       .get("/api/articles/99")
       .expect(404)
@@ -115,7 +115,7 @@ describe("getArticles", () => {
         });
       });
   });
-  test("404: should return not found", () => {
+  test("404 should return not found when passed an article that is invalid", () => {
     return request(app)
       .get("/api/articles/99/comments")
       .expect(404)
@@ -176,7 +176,7 @@ describe("post article comments", () => {
         );
       });
   });
-  test('404: should return not found', () => {
+  test('404 should return not found when passed an comment that is invalid', () => {
     const input = {
       author: "icellusedkars",
       body: "lol",
@@ -212,7 +212,7 @@ describe("patch article votes", () => {
         });
       });
   });
-  test("404: should return not found", () => {
+  test("404 should return not found when passed an article that is invalid", () => {
     return request(app)
       .patch("/api/articles/99")
       .send({ inc_votes: 1 })
@@ -243,12 +243,12 @@ describe("delete article comments", () => {
         expect(body).toEqual({});
       });
   });
-  test("404: should return not found", () => {
+  test("404 should return not found when passed an comment that is invalid", () => {
     return request(app)
       .delete("/api/comments/999")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe(`ERROR: no article with that id found`);
+        expect(body.msg).toBe(`ERROR: no comment with that id found`);
       });
   });
   test("400: should return bad request", () => {
@@ -331,7 +331,7 @@ describe("get comment count from article", () => {
         });
       });
   });
-  test("404: should return not found", () => {
+  test("404 should return not found when passed an article that is invalid", () => {
     return request(app)
       .get("/api/articles/99")
       .expect(404)
