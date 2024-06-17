@@ -32,19 +32,22 @@ exports.createArticleComments = (article_id, body) => {
     VALUES 
     ($1, $2, $3) 
     returning *`,
-      commentBody
+    commentBody
     )
     .then((query) => {
       if (query.rowCount === 0) {
         return Promise.reject({
           status: 404,
-          msg: `ERROR: no article with that id found`,
+          msg: `ERROR: no comment with that id found`,
         });
       } else {
         return query.rows;
       }
-    });
-};
+    })
+    .catch((err) => {
+      throw err
+    })
+}
 
 exports.removesComment = (comment_id) => {
     return db.query(`DELETE FROM comments 
@@ -53,7 +56,7 @@ exports.removesComment = (comment_id) => {
         if (query.rows.length === 0) {
             return Promise.reject({
               status: 404,
-              msg: `ERROR: no article with that id found`,
+              msg: `ERROR: no comment with that id found`,
             });
           }
     })
