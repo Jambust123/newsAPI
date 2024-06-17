@@ -14,7 +14,7 @@ afterAll(() => {
   return db.end();
 });
 
-describe("getTopics", () => {
+describe.only("getTopics", () => {
   test("200: /api/topics", () => {
     return request(app)
       .get("/api/topics")
