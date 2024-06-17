@@ -20,11 +20,11 @@ describe("getTopics", () => {
       .get("/api/topics")
       .expect(200)
       .then(({ body }) => {
-        expect(body).toEqual([
+        expect(body).toEqual(
           { description: "The man, the Mitch, the legend", slug: "mitch" },
           { description: "Not dogs", slug: "cats" },
-          { description: "what books are made of", slug: "paper" },
-        ]);
+          { description: "what books are made of", slug: "paper" }
+        );
       });
   });
 
@@ -176,16 +176,16 @@ describe("post article comments", () => {
         );
       });
   });
-  test('404 should return not found when passed an comment that is invalid', () => {
+  test("404 should return not found when passed an comment that is invalid", () => {
     const input = {
       author: "icellusedkars",
       body: "lol",
     };
     return request(app)
-    .post("/api/articles/99/comments")
-    .send(input)
-     .expect(404)
-     .then(({ body }) => {
+      .post("/api/articles/99/comments")
+      .send(input)
+      .expect(404)
+      .then(({ body }) => {
         expect(body.msg).toBe(`ERROR: no article with that id found`);
       });
   });
@@ -278,11 +278,11 @@ describe(" get users", () => {
         });
       });
   });
-  test('200: should have 4 users', () => {
+  test("200: should have 4 users", () => {
     return request(app)
-     .get("/api/users")
-     .expect(200)
-     .then(({ body }) => {
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
         expect(body.users.length).toBe(4);
       });
   });
@@ -308,13 +308,13 @@ describe("get articles by topic", () => {
         });
       });
   });
-  test('200: should have 12 articles witht the mitch topic', () => {
+  test("200: should have 12 articles witht the mitch topic", () => {
     return request(app)
-     .get("/api/articles?topic=mitch")
-     .expect(200)
-     .then(({ body }) => {
-       expect(body.allArticles.length).toBe(12);
-     })
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.allArticles.length).toBe(12);
+      });
   });
   test("404: should return not found", () => {
     return request(app)
