@@ -14,7 +14,7 @@ afterAll(() => {
   return db.end();
 });
 
-describe.only("getTopics", () => {
+describe("getTopics", () => {
   test("200: /api/topics", () => {
     return request(app)
       .get("/api/topics")
@@ -143,7 +143,7 @@ describe("getArticles", () => {
   });
 });
 
-describe("post article comments", () => {
+describe.only("post article comments", () => {
   test("201: should post a comment to the relecent article", () => {
     const input = {
       author: "icellusedkars",

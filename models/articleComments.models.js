@@ -35,7 +35,8 @@ exports.createArticleComments = (article_id, body) => {
     commentBody
     )
     .then((query) => {
-      if (query.rowCount === 0) {
+      console.log(query);
+      if (query.rowCount < 1) {
         return Promise.reject({
           status: 404,
           msg: `ERROR: no comment with that id found`,
