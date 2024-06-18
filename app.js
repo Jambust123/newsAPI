@@ -20,13 +20,6 @@ const cors = require("cors");
 
 app.use(cors());
 
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  next();
-})
-
 app.use(express.json());
 
 app.get("/api/topics", getTopics);
@@ -54,7 +47,7 @@ app.use((err, req, res, next) => {
     });
   }else if (err.code && !(err.code === "23503")) {
     res.status(400).send({
-      msg: err.msg,
+      msg: `ERROR: bad request. ensure you use a valid article ID number`,
     });
   }
   next(err);

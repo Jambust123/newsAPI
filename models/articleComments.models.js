@@ -1,16 +1,15 @@
 const db = require("../db/connection");
 
-
 exports.findArticleComments = (article_id) => {
-  let queryString = ` SELECT * FROM comments `;
+  let queryString = `SELECT * FROM comments`;
   const queries = [];
 
   if (article_id) {
     queryString += ` WHERE article_id = $1 ORDER BY comments.created_at DESC`;
     queries.push(article_id);
   }
-return db.query(queryString, queries)
-.then((query) => {
+
+  return db.query(queryString, queries).then((query) => {
     if (query.rows.length === 0) {
       return Promise.reject({
         status: 404,
@@ -23,7 +22,7 @@ return db.query(queryString, queries)
 };
 
 exports.createArticleComments = (article_id, body) => {
-  commentBody = [article_id, body.author, body.body];
+  const commentBody = [article_id, body.author, body.body];
 
   return db
     .query(
@@ -31,12 +30,11 @@ exports.createArticleComments = (article_id, body) => {
     (article_id, author, body) 
     VALUES 
     ($1, $2, $3) 
-    returning *`,
-    commentBody
+    RETURNING *`,
+      commentBody
     )
     .then((query) => {
-      console.log(query);
-      if (query.rowCount < 1) {
+      if (query.rowCount === 0) {
         return Promise.reject({
           status: 404,
           msg: `ERROR: no comment with that id found`,
@@ -46,19 +44,21 @@ exports.createArticleComments = (article_id, body) => {
       }
     })
     .catch((err) => {
-      throw err
-    })
-}
+      throw err;
+    });
+};
 
 exports.removesComment = (comment_id) => {
-    return db.query(`DELETE FROM comments 
-    WHERE comment_id = $1 RETURNING *`, [comment_id])
+  return db
+    .query(`DELETE FROM comments WHERE comment_id = $1 RETURNING *`, [
+      comment_id,
+    ])
     .then((query) => {
-        if (query.rows.length === 0) {
-            return Promise.reject({
-              status: 404,
-              msg: `ERROR: no comment with that id found`,
-            });
-          }
-    })
-}
+      if (query.rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: `ERROR: no comment with that id found`,
+        });
+      }
+    });
+};
