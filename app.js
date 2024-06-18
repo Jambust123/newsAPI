@@ -54,7 +54,7 @@ app.use((err, req, res, next) => {
     });
   }else if (err.code && !(err.code === "23503")) {
     res.status(400).send({
-      msg: `ERROR: bad request. ensure you use a valid article ID number`,
+      msg: err.code,
     });
   }
   next(err);
