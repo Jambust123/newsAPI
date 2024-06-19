@@ -4,7 +4,7 @@ const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data/index");
 const app = require("../app");
 const endpoint = require("../endpoints.json");
-const jestsorted = require("jest-sorted");
+const {toBeSortedBy} = require("jest-sorted");
 const { string } = require("pg-format");
 
 beforeEach(() => {
@@ -363,6 +363,43 @@ describe("get comment count from article", () => {
         expect(body.msg).toBe(
           `ERROR: bad request. ensure you use a valid article ID number`
         );
+      });
+  });
+});
+
+
+
+describe.only("get articles by queries", () => {
+  test("200: should get all articles sorted by time created", () => {
+    return request(app)
+      .get("/api/articles?sort_by=created_at")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.allArticles).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+  test("200: should get all articles sorted by comment count", () => {
+    return request(app)
+      .get("/api/articles?sort_by=comment_count")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.allArticles).toBeSortedBy("comment_count", { descending: true });
+      });
+  });
+  test("200: should get all articles sorted by votes", () => {
+    return request(app)
+      .get("/api/articles?sort_by=votes")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.allArticles).toBeSortedBy("votes", { descending: true });
+      });
+  });
+  test("200: should get all articles sorted by votes in ascending order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=votes&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.allArticles).toBeSortedBy("votes", { descending: false });
       });
   });
 });
